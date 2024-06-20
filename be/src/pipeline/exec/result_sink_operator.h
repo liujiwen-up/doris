@@ -17,8 +17,6 @@
 
 #pragma once
 
-#include <stdint.h>
-
 #include "operator.h"
 #include "runtime/buffer_control_block.h"
 #include "runtime/result_writer.h"
@@ -106,7 +104,7 @@ struct ResultFileOptions {
     }
 };
 
-constexpr int RESULT_SINK_BUFFER_SIZE = 4096;
+constexpr int RESULT_SINK_BUFFER_SIZE = 4096 * 8;
 
 class ResultSinkLocalState final : public PipelineXSinkLocalState<BasicSharedState> {
     ENABLE_FACTORY_CREATOR(ResultSinkLocalState);
@@ -159,6 +157,8 @@ private:
 
     // for fetch data by rowids
     TFetchOption _fetch_option;
+
+    std::shared_ptr<BufferControlBlock> _sender = nullptr;
 };
 
 } // namespace pipeline
